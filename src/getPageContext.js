@@ -1,6 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 
-import { SheetsRegistry } from 'jss'
+import {
+    SheetsRegistry
+} from 'jss'
 import {
     createGenerateClassName,
     createMuiTheme,
@@ -12,15 +14,18 @@ import teal from '@material-ui/core/colors/teal'
 // It's optional.
 const theme = createMuiTheme({
     palette: {
-        secondary: {
-            light: red[300],
-            main: red[500],
-            dark: red[700],
-        },
         primary: {
-            light: teal[300],
-            main: teal[500],
-            dark: teal[700],
+            light: "#6d6d6d",
+            main: "#424242",
+            dark: "#1b1b1b",
+            contrastText: '#ffffff',
+
+        },
+        secondary: {
+            light: "#ff6659",
+            main: "#d32f2f",
+            dark: "#9a0007",
+            contrastText: '#ffffff',
         },
     },
     typography: {
@@ -28,7 +33,7 @@ const theme = createMuiTheme({
     },
 })
 
-function createPageContext () {
+function createPageContext() {
     return {
         theme,
         // This is needed in order to deduplicate the injection of CSS in the page.
@@ -40,7 +45,7 @@ function createPageContext () {
     }
 }
 
-export default function getPageContext () {
+export default function getPageContext() {
     // Make sure to create a new context for every server-side request so that data
     // isn't shared between connections (which would be bad).
     if (!process.browser) {
