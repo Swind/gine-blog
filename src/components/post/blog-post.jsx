@@ -78,19 +78,13 @@ class BlogPost extends React.Component {
             <div>
                 <ScrollProgress />
                 <Layout navStyle={{ background: 'rgba(0,0,0,.05)' }} wrapStyle={{ marginTop: 0 }}>
-                    <img style={{
-                        width: '100%',
-                        height: '400px',
-                        objectFit: 'cover',
-                        zIndex: 1
-                    }} src={coverImageUrl} />
                     <Helmet defaultTitle={`${config.blogMeta.title} - ${name}`}>
                         <meta name="description" content={`${seoKeywords} ${name} mayne gine 博客 python react`} />
                     </Helmet>
                     <main style={{
                         maxWidth: 900,
                         margin: '0 auto',
-                        marginTop: -100,
+                        marginTop: 100,
                         marginBottom: 100,
                         zIndex: 10
                     }} className="sticky">

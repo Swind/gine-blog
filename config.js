@@ -1,26 +1,25 @@
-
 // 
 
 module.exports = {
     // blog mate
     blogMeta: {
-        name: 'Mayne', // copyright 显示
-        title: `Mayne's Blog`, //网站标题
-        pageSize: 3, // 每页多少篇文章
-        description: `All things about Mayne`, // 网站描述 seo
-        siteUrl: `https://gine.me`, // 站点URL
+        name: 'Swind', // copyright 显示
+        title: `Corleonis`, //网站标题
+        pageSize: 4, // 每页多少篇文章
+        description: `program`, // 网站描述 seo
+        siteUrl: `https://swind.code-life.info`, // 站点URL
         aboutPostSlug: `10a70927d25a43d19acf14e0d36354e7`, //没有单独的about页面，about页面指向文章。
         avatar: '41546411364_.pic.jpg', // src/static 目录下
         // 社交帐号配置，显示在页面最下方。
         me: {
-            github: 'mayneyao' // github 用户名称
+            github: 'swind' // github 用户名称
         }
     },
 
     // 博客数据源 目前只适配notion
     blog: {
         sourceType: 'notion',
-        url: 'https://www.notion.so/99623ef9630940cdb8524ba355831677?v=8366741ca7dd4b339c19484712e13563', // notion中文章表的链接
+        url: 'https://www.notion.so/aed78a3454114a1eb8402f84de4580c3?v=58ef99ecde1f4bd7ab324c4cc75087ca', // notion中文章表的链接
         // 建议开启，可以大大提高build速度
         // 访问 https://github.com/settings/tokens 获取token 
         // export GitHubToken='yourtokenhere'
@@ -150,21 +149,27 @@ module.exports = {
                   }
                 }
               `,
-            feeds: [
-                {
-                    serialize: ({ query: { site, allPost } }) => {
-                        return allPost.edges.map(edge => {
-                            return {
-                                title: edge.node.name,
-                                description: edge.node.brief,
-                                date: edge.node.public_date,
-                                url: site.siteMetadata.siteUrl + '/' + edge.node.slug,
-                                guid: site.siteMetadata.siteUrl + '/' + edge.node.slug,
-                                custom_elements: [{ "content:encoded": edge.node.html }],
-                            }
-                        })
-                    },
-                    query: `
+            feeds: [{
+                serialize: ({
+                    query: {
+                        site,
+                        allPost
+                    }
+                }) => {
+                    return allPost.edges.map(edge => {
+                        return {
+                            title: edge.node.name,
+                            description: edge.node.brief,
+                            date: edge.node.public_date,
+                            url: site.siteMetadata.siteUrl + '/' + edge.node.slug,
+                            guid: site.siteMetadata.siteUrl + '/' + edge.node.slug,
+                            custom_elements: [{
+                                "content:encoded": edge.node.html
+                            }],
+                        }
+                    })
+                },
+                query: `
                     {
                       allPost(limit: 1000,sort: { order: DESC, fields: [public_date] },) {
                         edges {
@@ -179,10 +184,9 @@ module.exports = {
                       }
                     }
                   `,
-                    output: "/feed",
-                    title: "GiNE RSS Feed",
-                },
-            ],
+                output: "/feed",
+                title: "GiNE RSS Feed",
+            }, ],
         },
     }
 }

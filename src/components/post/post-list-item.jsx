@@ -23,32 +23,12 @@ const styles = {
     },
 }
 
-function notionImageResize(url, width) {
-    let encodedUrl = encodeURIComponent(url)
-    return `https://notion.so/image/${encodedUrl}?width=${width}`
-}
-
 function ImgMediaCard(props) {
     const { classes, title, content, slug, format, tags, date } = props
     const MyLink = props => <Link to={slug} {...props} />
-    let coverImageUrl
-    if (format && format.page_cover) {
-        let cover = format.page_cover
-        coverImageUrl = notion.parseImageUrl(cover, 520)
-    } else {
-        coverImageUrl = notionImageResize(getImageByName(slug), 520)
-    }
     return (
         <Card className={classes.card}>
             <CardActionArea component={MyLink}>
-                <CardMedia
-                    component="img"
-                    alt="Contemplative Reptile"
-                    className={classes.media}
-                    height="140"
-                    image={coverImageUrl}
-                    title="Contemplative Reptile"
-                />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
                         {title}

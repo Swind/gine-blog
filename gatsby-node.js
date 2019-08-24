@@ -2,9 +2,13 @@ const path = require(`path`)
 const fs = require("fs")
 const notion = require('./src/notion/syncBlog')
 const notionApi = require('./src/notion/api')
-const { syncAphorisms } = require('./src/notion/aphorisms')
+const {
+    syncAphorisms
+} = require('./src/notion/aphorisms')
 const config = require('./config')
-const { genBangumiData } = require('./src/components/bangumi/api')
+const {
+    genBangumiData
+} = require('./src/components/bangumi/api')
 
 function genApiData(data, type, key, createNode, createNodeId, createContentDigest) {
     data.map(itemData => {
@@ -26,8 +30,14 @@ function genApiData(data, type, key, createNode, createNodeId, createContentDige
 }
 
 
-exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
-    const { createNode } = actions;
+exports.sourceNodes = async ({
+    actions,
+    createNodeId,
+    createContentDigest
+}) => {
+    const {
+        createNode
+    } = actions;
 
     // 生成友链数据
     let linkData
@@ -35,14 +45,12 @@ exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => 
         linkData = await notionApi.queryCollection(config.friendLink.url)
     } else {
         // 如果你的友链数据不是通过 notion表格获取的,你可以在这里直接定义，或者从其他地方获取。数据格式如下
-        linkData = [
-            {
-                desc: "Mayne's Blog",
-                icon: "https://gine.me/icons/icon-48x48.png",
-                url: "https://gine.me",
-                name: "Mayne"
-            },
-        ]
+        linkData = [{
+            desc: "Mayne's Blog",
+            icon: "https://gine.me/icons/icon-48x48.png",
+            url: "https://gine.me",
+            name: "Mayne"
+        }, ]
     }
     genApiData(linkData, 'Link', 'name', createNode, createNodeId, createContentDigest)
 
@@ -50,21 +58,38 @@ exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => 
     await genBangumiData(createNode, createNodeId, createContentDigest);
 
     // 生成blog post数据
-    await notion.syncNotionBlogData({ createNode, createNodeId, createContentDigest });
+    await notion.syncNotionBlogData({
+        createNode,
+        createNodeId,
+        createContentDigest
+    });
 
     // 生成书单数据
-    await notion.syncNotionBookData({ createNode, createNodeId, createContentDigest });
+    await notion.syncNotionBookData({
+        createNode,
+        createNodeId,
+        createContentDigest
+    });
 
     // 保存格言数据
     await syncAphorisms();
 }
 
 
-exports.onCreateNode = ({ node, getNode, actions }) => {
-    const { createNodeField } = actions
+exports.onCreateNode = ({
+    node,
+    getNode,
+    actions
+}) => {
+    const {
+        createNodeField
+    } = actions
 }
 
-exports.createPages = ({ graphql, actions }) => {
+exports.createPages = ({
+    graphql,
+    actions
+}) => {
 
     // google adsense 校验
     if (config.google_ad_client.open) {
@@ -88,7 +113,9 @@ exports.createPages = ({ graphql, actions }) => {
 
     // **Note:** The graphql function call returns a Promise
     // see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise for more info
-    const { createPage } = actions
+    const {
+        createPage
+    } = actions
 
     return graphql(`
     {
@@ -108,12 +135,14 @@ exports.createPages = ({ graphql, actions }) => {
       }
     }`).then(result => {
 
-        const { pageSize } = result.data.site.siteMetadata
+        const {
+            pageSize
+        } = result.data.site.siteMetadata
 
         // 创建主页
         createPage({
             path: `/`,
-            component: path.resolve(`./src/components/post/post-page.js`),
+            component: path.resolve(`./src/components/post/post-page.jsx`),
             context: {
                 skip: 0,
                 limit: pageSize,
@@ -122,12 +151,15 @@ exports.createPages = ({ graphql, actions }) => {
         })
 
         // 创建分页
-        const { totalCount, edges } = result.data.allPost
+        const {
+            totalCount,
+            edges
+        } = result.data.allPost
         const pageCount = Math.ceil(totalCount / pageSize)
         for (let i = 1; i <= pageCount; i++) {
             createPage({
                 path: `page/${i}`,
-                component: path.resolve(`./src/components/post/post-page.js`),
+                component: path.resolve(`./src/components/post/post-page.jsx`),
                 context: {
                     skip: (i - 1) * pageSize,
                     limit: pageSize,
@@ -137,10 +169,12 @@ exports.createPages = ({ graphql, actions }) => {
         }
 
         // 创建文章详情页
-        edges.forEach(({ node }) => {
+        edges.forEach(({
+            node
+        }) => {
             createPage({
                 path: node.slug,
-                component: path.resolve(`./src/components/post/blog-post.js`),
+                component: path.resolve(`./src/components/post/blog-post.jsx`),
                 context: {
                     // Data passed to context is available
                     // in page queries as GraphQL variables.
@@ -150,7 +184,9 @@ exports.createPages = ({ graphql, actions }) => {
         })
         // 创建tag详情页
         let allTags = new Set()
-        edges.forEach(({ node }) => {
+        edges.forEach(({
+            node
+        }) => {
             node.tags.map(tag => allTags.add(tag))
         })
 
@@ -184,16 +220,18 @@ exports.createPages = ({ graphql, actions }) => {
 
 
 // fix antv build error
-exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
+exports.onCreateWebpackConfig = ({
+    stage,
+    loaders,
+    actions
+}) => {
     if (stage === "build-html") {
         actions.setWebpackConfig({
             module: {
-                rules: [
-                    {
-                        test: /@antv/,
-                        use: loaders.null(),
-                    },
-                ],
+                rules: [{
+                    test: /@antv/,
+                    use: loaders.null(),
+                }, ],
             },
         })
     }
