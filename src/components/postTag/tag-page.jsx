@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
+import Badge from '@material-ui/core/Badge'
 import withRoot from '../../withRoot'
 import Layout from '../layout'
 import PostListItem from '../post/post-list-item'
@@ -19,6 +20,18 @@ const styles = theme => ({
     },
 })
 
+const StyledBadge = withStyles(theme => ({
+    badge: {
+        top: '30%',
+        right: -10,
+        // The border color match the background color.
+        border: `2px solid ${
+            theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[900]
+            }`,
+    },
+}))(Badge);
+
+
 class Index extends React.Component {
     render() {
         const { classes, data } = this.props
@@ -27,7 +40,9 @@ class Index extends React.Component {
             <Layout>
                 <div className={classes.index}>
                     <div style={{ display: 'flex' }}>
-                        <span>共有{data.allPost.totalCount}篇关于 </span> <ColorfulTag tag={tag} /> <span>的文章</span>
+                        <StyledBadge className={classes.margin} badgeContent={data.allPost.totalCount} color="primary">
+                            <ColorfulTag tag={tag} />
+                        </StyledBadge>
                     </div>
 
                     {data.allPost.edges.map(({ node }) => (

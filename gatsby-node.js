@@ -193,7 +193,7 @@ exports.createPages = ({
         Array.from(allTags).map(tag => {
             createPage({
                 path: `tags/${tag}`,
-                component: path.resolve(`./src/components/postTag/tag-page.js`),
+                component: path.resolve(`./src/components/postTag/tag-page.jsx`),
                 context: {
                     tag: tag,
                 },
