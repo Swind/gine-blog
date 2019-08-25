@@ -31,17 +31,16 @@ syncBlogData = async (url) => {
         // TOC 链接转化
         let qs = "#notion-app > div > div.notion-cursor-listener > div > div.notion-scroller.vertical.horizontal > div.notion-page-content > div > div:nth-child(1) > div > a"
         document.querySelectorAll(qs).forEach(item => {
-            // 真是服了，puppeteer传个函数这么麻烦。🤯
             const getFullBlockId = (blockId) => {
                 if (typeof blockId !== 'string') {
                     throw Error(`blockId: ${typeof blockId} must be string`)
                 }
                 if (blockId.match("^[a-zA-Z0-9]+$")) {
-                    return blockId.substr(0, 8) + "-"
-                        + blockId.substr(8, 4) + "-"
-                        + blockId.substr(12, 4) + "-"
-                        + blockId.substr(16, 4) + "-"
-                        + blockId.substr(20, 32)
+                    return blockId.substr(0, 8) + "-" +
+                        blockId.substr(8, 4) + "-" +
+                        blockId.substr(12, 4) + "-" +
+                        blockId.substr(16, 4) + "-" +
+                        blockId.substr(20, 32)
                 } else {
                     return blockId
                 }
@@ -63,8 +62,7 @@ syncBlogData = async (url) => {
                 html: content.innerHTML,
                 brief: content.innerText.slice(0, 100)
             }
-        }
-        else {
+        } else {
             return false
         }
     })
@@ -91,7 +89,13 @@ uploadBlogData2Github = async (item, blogData) => {
 
 
 createBlogPostNode = (blogData, item, createNode, createNodeId, createContentDigest) => {
-    let data = { ...item, update_time: item.last_edited_time, slug: `posts/${item.slug}`, html: blogData.html, brief: blogData.brief }
+    let data = {
+        ...item,
+        update_time: item.last_edited_time,
+        slug: `posts/${item.slug}`,
+        html: blogData.html,
+        brief: blogData.brief
+    }
     const nodeContent = JSON.stringify(data)
     const nodeMeta = {
         id: createNodeId(data.slug),
@@ -118,7 +122,10 @@ getBlogInfoData = async (item, allBlogInfoFromGithub) => {
         console.log(`从本地获取文章缓存: ${item.name}`)
         let allData = fs.readFileSync(localPostDataPath)
         let postData = JSON.parse(allData)
-        const { update_time, html } = postData.result.data.post
+        const {
+            update_time,
+            html
+        } = postData.result.data.post
         return {
             blogData: {
                 brief: generateBrief(html, 100),
@@ -148,7 +155,11 @@ getBlogInfoData = async (item, allBlogInfoFromGithub) => {
     }
 }
 
-exports.syncNotionBlogData = async ({ createNode, createNodeId, createContentDigest }) => {
+exports.syncNotionBlogData = async ({
+    createNode,
+    createNodeId,
+    createContentDigest
+}) => {
 
     if (config.blog.sourceType === 'notion') {
         let url = config.blog.url
@@ -192,7 +203,11 @@ exports.syncNotionBlogData = async ({ createNode, createNodeId, createContentDig
     }
 }
 
-exports.syncNotionBookData = async ({ createNode, createNodeId, createContentDigest }) => {
+exports.syncNotionBookData = async ({
+    createNode,
+    createNodeId,
+    createContentDigest
+}) => {
     let url = 'https://www.notion.so/98717bf8ad57434eafd9a65277403c33?v=fa4f00bb9b5b492fb23157f8d5df471f'
     let res = await notion.queryCollection(url)
 

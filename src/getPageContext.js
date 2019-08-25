@@ -7,8 +7,7 @@ import {
     createGenerateClassName,
     createMuiTheme,
 } from '@material-ui/core/styles'
-import red from '@material-ui/core/colors/red'
-import teal from '@material-ui/core/colors/teal'
+
 
 // A theme with custom primary and secondary color.
 // It's optional.

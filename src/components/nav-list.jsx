@@ -7,16 +7,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import HomeIcon from '@material-ui/icons/Home'
 import TagIcon from '@material-ui/icons/Bookmark'
-import AboutIcon from '@material-ui/icons/Person'
-import BookListIcon from '@material-ui/icons/LibraryBooks'
-import SubscriptionsIcon from '@material-ui/icons/Subscriptions'
 import ArchiveIcon from '@material-ui/icons/Archive'
-import MusicIcon from '@material-ui/icons/Headset'
-import FriendIcon from '@material-ui/icons/People'
-import PaletteIcon from '@material-ui/icons/Palette'
-import MomentIcon from '@material-ui/icons/Camera'
 
-import CardMedia from '@material-ui/core/CardMedia'
 import { Link } from 'gatsby'
 
 import config from '../../config'
@@ -37,7 +29,11 @@ const styles = theme => ({
     },
 })
 
-const MyLink = props => <Link {...props} />
+const MyLink = (props) => {
+    return (
+        <Link {...props} />
+    )
+}
 
 function SimpleList(props) {
     let avatar = require(`../static/${config.blogMeta.avatar}`)

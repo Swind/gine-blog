@@ -3,6 +3,8 @@ import Bottom from './bottom'
 import '../index.css'
 import { withStyles } from '@material-ui/core/styles'
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer'
+import AppBar from '@material-ui/core/AppBar'
+import { Toolbar } from '@material-ui/core'
 import 'typeface-roboto'
 import NavList from './nav-list'
 import { Helmet } from "react-helmet"
@@ -99,10 +101,7 @@ class Layout extends React.Component {
             <div style={{ background: '#f3f5f7' }}>
                 <Helmet defaultTitle={`${config.blogMeta.title}${title ? ` - ${title}` : ""}`}>
                     <html lang="zh-cmn-Hans" />
-                    <meta name="description" content={`${config.blogMeta.title} 博客 python react gine`} />
-                    <noscript>
-                        为了更好的浏览体验，请不要在本页面禁用 Javascript 🙂
-                    </noscript>
+                    <meta name="description" content={`${config.blogMeta.title}`} />
                 </Helmet>
                 {
                     config.google_ad_client.open && <Helmet>
@@ -118,53 +117,28 @@ class Layout extends React.Component {
                     </Helmet>
                 }
 
-                <SwipeableDrawer
-                    disableBackdropTransition={!iOS}
-                    disableDiscovery={iOS}
-                    open={open}
-                    onOpen={this.toggleDrawer(true)}
-                    SwipeAreaProps={{ onMouseEnter: this.toggleDrawer(true) }}
-                    onClose={this.toggleDrawer(false)}>
-                    <div
-                        className={classes.drawer}
-                        tabIndex={0}
-                        role="button"
-                        onClick={this.toggleDrawer(false)}
-                        onKeyDown={this.toggleDrawer(false)}
-                    >
-                        <NavList />
-                        <Divider />
-                        {
-                            config.now.open && <div>
-                                <PlayingMusic data={music} />
-                                <PlayingGame data={game} />
+                <AppBar position="sticky">
+                    <Toolbar style={{ minHeight: 48 }}>
+                        <div style={{
+                            height: 40,
+                            position: "fixed",
+                            width: '100%',
+                            top: 0,
+                            zIndex: 999,
+                            ...navStyle
+                        }}>
+                            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
+                                <MenuIcon />
+                            </IconButton>
+
+                            <div style={{ wdith: '100%', height: '100%' }} onClick={this.back2Top}>
+
                             </div>
-                        }
-                    </div>
-                </SwipeableDrawer>
-                {/* <AppBar position="sticky">
-                    <Toolbar style={{ minHeight: 48 }}> */}
-                <div style={{
-                    height: 40,
-                    position: "fixed",
-                    background: "#fff",
-                    width: '100%',
-                    top: 0,
-                    zIndex: 999,
-                    ...navStyle
-                }}>
-                    <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
-                        <MenuIcon />
-                    </IconButton>
+                            {config.blog.search.open && <SearchButton />}
+                        </div>
 
-                    <div style={{ wdith: '100%', height: '100%' }} onClick={this.back2Top}>
-
-                    </div>
-                    {config.blog.search.open && <SearchButton />}
-                </div>
-
-                {/* </Toolbar>
-                </AppBar> */}
+                    </Toolbar>
+                </AppBar>
                 <div id="top"></div>
                 <div style={{ margin: `0 auto`, marginTop: '40px', ...wrapStyle }}>
                     {this.props.children}
